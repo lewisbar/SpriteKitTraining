@@ -14,11 +14,14 @@ class GameScene: SKScene {
     let ball = SKSpriteNode(imageNamed: "StarBall")
     let floor = SKSpriteNode(imageNamed: "Floor")
     var initialBallPosition: CGPoint!
+    var initialBallSize: CGSize!
     
     override func didMove(to view: SKView) {
         
-        backgroundColor = .lightGray
         initialBallPosition = CGPoint(x: ball.size.width, y: floor.size.height + ball.size.height / 2)
+        initialBallSize = ball.size
+        
+        backgroundColor = .lightGray
         
         floor.anchorPoint = .zero
         floor.position = .zero
@@ -37,6 +40,8 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             ball.position = touch.location(in: floor)
+            ball.size.width *= 2
+            ball.size.height *= 2
         }
     }
     
@@ -49,7 +54,8 @@ class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let fingerPosition = touch.location(in: floor)
-            ball.position = CGPoint(x: fingerPosition.x, y: initialBallPosition.y)
+            self.ball.position = CGPoint(x: fingerPosition.x, y: self.initialBallPosition.y)
+            self.ball.size = self.initialBallSize
         }
     }
 }
