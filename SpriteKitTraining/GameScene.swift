@@ -26,6 +26,7 @@ class GameScene: SKScene {
         floor.anchorPoint = .zero
         floor.position = .zero
         floor.zPosition = 1
+        floor.size.width = self.size.width
         self.addChild(floor)
         
         ball.position = initialBallPosition
