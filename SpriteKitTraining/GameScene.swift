@@ -22,8 +22,19 @@ class GameScene: SKScene {
         // Background
         backgroundColor = .lightGray
         
+        // PhysicsWorld
+        physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
+        
         // Floor
         placeForEndLessScrolling(node1: floor1, node2: floor2)
+        let floor1TopLeft = CGPoint(x: 0, y: floor1.size.height)
+        let floor1TopRight = CGPoint(x: floor1.size.width, y: floor1.size.height)
+        floor1.physicsBody = SKPhysicsBody(edgeFrom: floor1TopLeft, to: floor1TopRight)
+        let floor2TopLeft = CGPoint(x: 0, y: floor2.size.height)
+        let floor2TopRight = CGPoint(x: floor2.size.width, y: floor2.size.height)
+        floor2.physicsBody = SKPhysicsBody(edgeFrom: floor2TopLeft, to: floor2TopRight)
+        floor1.physicsBody?.isDynamic = false
+        floor2.physicsBody?.isDynamic = false
         self.addChild(floor1)
         self.addChild(floor2)
         
@@ -32,6 +43,7 @@ class GameScene: SKScene {
         initialBallSize = ball.size
         ball.position = initialBallPosition
         ball.zPosition = 2
+        ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2)
         self.addChild(ball)
     }
     
@@ -80,9 +92,9 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let fingerPosition = touch.location(in: self)
-            self.ball.position = CGPoint(x: fingerPosition.x, y: self.initialBallPosition.y)
+        for _ in touches {
+            //let fingerPosition = touch.location(in: self)
+            //self.ball.position = CGPoint(x: fingerPosition.x, y: self.initialBallPosition.y)
             self.ball.size = self.initialBallSize
         }
     }
