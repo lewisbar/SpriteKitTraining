@@ -67,8 +67,7 @@ class GameScene: SKScene {
     // MARK: - Ball Grabbing
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            ball.position.x = touch.location(in: view).x
-            ball.position.y = -touch.location(in: view).y + (view?.bounds.height)!
+            ball.position = touch.location(in: self)
             ball.size.width *= 2
             ball.size.height *= 2
         }
@@ -76,14 +75,13 @@ class GameScene: SKScene {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            ball.position.x = touch.location(in: view).x
-            ball.position.y = -touch.location(in: view).y + (view?.bounds.height)!
+            ball.position = touch.location(in: self)
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let fingerPosition = touch.location(in: view)
+            let fingerPosition = touch.location(in: self)
             self.ball.position = CGPoint(x: fingerPosition.x, y: self.initialBallPosition.y)
             self.ball.size = self.initialBallSize
         }
