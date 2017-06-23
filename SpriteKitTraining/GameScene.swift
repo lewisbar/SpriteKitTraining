@@ -18,23 +18,18 @@ class GameScene: SKScene {
     var initialBallSize: CGSize!
     
     override func didMove(to view: SKView) {
-        initialBallPosition = CGPoint(x: ball.size.width, y: floor1.size.height + ball.size.height / 2)
-        initialBallSize = ball.size
         
+        // Background
         backgroundColor = .lightGray
         
-        floor1.anchorPoint = .zero
-        floor1.position = .zero
-        floor1.zPosition = 1
-        floor1.size.width = self.size.width
+        // Floor
+        placeForEndLessScrolling(node1: floor1, node2: floor2)
         self.addChild(floor1)
-        
-        floor2.anchorPoint = .zero
-        floor2.position = CGPoint(x: floor1.size.width, y: 0)
-        floor2.zPosition = 1
-        floor2.size.width = self.size.width
         self.addChild(floor2)
         
+        // Ball
+        initialBallPosition = CGPoint(x: ball.size.width, y: floor1.size.height + ball.size.height / 2)
+        initialBallSize = ball.size
         ball.position = initialBallPosition
         ball.zPosition = 2
         self.addChild(ball)
@@ -42,17 +37,34 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         ball.zRotation -= .pi * 5 / 180
+        scrollLeftEndlessly(node1: floor1, node2: floor2, speed: 4)
+    }
+    
+    // MARK: - Floor Scrolling
+    func placeForEndLessScrolling(node1: SKSpriteNode, node2: SKSpriteNode) {
+        node1.anchorPoint = .zero
+        node1.position = .zero
+        node1.zPosition = 1
+        node1.size.width = self.size.width
         
-        floor1.position.x -= 4
-        floor2.position.x -= 4
+        node2.anchorPoint = .zero
+        node2.position = CGPoint(x: node1.size.width, y: 0)
+        node2.zPosition = 1
+        node2.size.width = self.size.width
+    }
+    
+    func scrollLeftEndlessly(node1: SKSpriteNode, node2: SKSpriteNode, speed: CGFloat) {
+        node1.position.x -= speed
+        node2.position.x -= speed
         
-        if floor1.position.x < -floor1.size.width {
-            floor1.position.x = floor2.position.x + floor2.size.width
-        } else if floor2.position.x < -floor2.size.width {
-            floor2.position.x = floor1.position.x + floor1.size.width
+        if node1.position.x < -node1.size.width {
+            node1.position.x = node2.position.x + node2.size.width
+        } else if node2.position.x < -node2.size.width {
+            node2.position.x = node1.position.x + node1.size.width
         }
     }
     
+    // MARK: - Ball Grabbing
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             ball.position.x = touch.location(in: view).x
