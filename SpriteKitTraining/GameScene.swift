@@ -82,6 +82,7 @@ class GameScene: SKScene {
             ball.position = touch.location(in: self)
             ball.size.width *= 2
             ball.size.height *= 2
+            ball.physicsBody?.isDynamic = false
         }
     }
     
@@ -96,6 +97,7 @@ class GameScene: SKScene {
             //let fingerPosition = touch.location(in: self)
             //self.ball.position = CGPoint(x: fingerPosition.x, y: self.initialBallPosition.y)
             self.ball.size = self.initialBallSize
+            ball.physicsBody?.isDynamic = true
         }
     }
 }
