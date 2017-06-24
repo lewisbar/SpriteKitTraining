@@ -11,7 +11,9 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    let ball = SKSpriteNode(imageNamed: "StarBall")
+    let balls = [#imageLiteral(resourceName: "RedStarBall"), #imageLiteral(resourceName: "BlueStarBall"), #imageLiteral(resourceName: "GreenStarBall"), #imageLiteral(resourceName: "BrownStarBall"), #imageLiteral(resourceName: "PurpleStarBall"), #imageLiteral(resourceName: "LightBlueStarBall"), #imageLiteral(resourceName: "BlackStarBall"), #imageLiteral(resourceName: "OrangeStarBall"), #imageLiteral(resourceName: "YellowStarBall"), #imageLiteral(resourceName: "PinkStarBall"), #imageLiteral(resourceName: "GrayStarBall")]
+    var ballIndex = 0
+    let ball = SKSpriteNode(imageNamed: "RedStarBall")
     let floor1 = SKSpriteNode(imageNamed: "Floor")
     let floor2 = SKSpriteNode(imageNamed: "Floor")
     var initialBallPosition: CGPoint!
@@ -39,6 +41,7 @@ class GameScene: SKScene {
         self.addChild(floor2)
         
         // Ball
+        ball.texture = SKTexture(image: balls[0])
         initialBallPosition = CGPoint(x: ball.size.width, y: floor1.size.height + ball.size.height / 2)
         initialBallSize = ball.size
         ball.position = initialBallPosition
@@ -100,6 +103,13 @@ class GameScene: SKScene {
             // Move ball to top when released underground
             if ball.position.y < floor1.size.height {
                 ball.position.y = self.size.height
+                
+                if ballIndex < balls.count - 1 {
+                    ballIndex += 1
+                } else {
+                    ballIndex = 0
+                }
+                ball.texture = SKTexture(image: balls[ballIndex])
             }
         }
     }
