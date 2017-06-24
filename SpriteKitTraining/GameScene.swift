@@ -94,10 +94,14 @@ class GameScene: SKScene {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for _ in touches {
-            //let fingerPosition = touch.location(in: self)
-            //self.ball.position = CGPoint(x: fingerPosition.x, y: self.initialBallPosition.y)
             self.ball.size = self.initialBallSize
             ball.physicsBody?.isDynamic = true
+            
+            if ball.position.y < floor1.size.height {
+                print(self.size.height)
+                print(ball.position.y)
+                ball.position.y = self.size.height
+            }
         }
     }
 }
