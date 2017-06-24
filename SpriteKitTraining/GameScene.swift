@@ -100,15 +100,11 @@ class GameScene: SKScene {
             self.ball.size = self.initialBallSize
             ball.physicsBody?.isDynamic = true
             
-            // Move ball to top when released underground
+            // Move ball to top and change its color when released underground
             if ball.position.y < floor1.size.height {
                 ball.position.y = self.size.height
                 
-                if ballIndex < balls.count - 1 {
-                    ballIndex += 1
-                } else {
-                    ballIndex = 0
-                }
+                ballIndex = (ballIndex < balls.count - 1) ? (ballIndex + 1) : 0
                 ball.texture = SKTexture(image: balls[ballIndex])
             }
         }
