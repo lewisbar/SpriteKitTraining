@@ -97,9 +97,8 @@ class GameScene: SKScene {
             self.ball.size = self.initialBallSize
             ball.physicsBody?.isDynamic = true
             
+            // Move ball to top when released underground
             if ball.position.y < floor1.size.height {
-                print(self.size.height)
-                print(ball.position.y)
                 ball.position.y = self.size.height
             }
         }
