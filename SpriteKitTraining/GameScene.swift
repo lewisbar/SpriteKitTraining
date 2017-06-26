@@ -7,7 +7,6 @@
 //
 
 import SpriteKit
-import GameplayKit
 
 class GameScene: SKScene {
     
@@ -28,20 +27,13 @@ class GameScene: SKScene {
         physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
         
         // Floor
+        setupFloor(floor1)
+        setupFloor(floor2)
         placeForEndLessScrolling(node1: floor1, node2: floor2)
-        let floor1TopLeft = CGPoint(x: 0, y: floor1.size.height)
-        let floor1TopRight = CGPoint(x: floor1.size.width, y: floor1.size.height)
-        floor1.physicsBody = SKPhysicsBody(edgeFrom: floor1TopLeft, to: floor1TopRight)
-        let floor2TopLeft = CGPoint(x: 0, y: floor2.size.height)
-        let floor2TopRight = CGPoint(x: floor2.size.width, y: floor2.size.height)
-        floor2.physicsBody = SKPhysicsBody(edgeFrom: floor2TopLeft, to: floor2TopRight)
-        floor1.physicsBody?.isDynamic = false
-        floor2.physicsBody?.isDynamic = false
         self.addChild(floor1)
         self.addChild(floor2)
         
         // Ball
-        ball.texture = SKTexture(image: balls[0])
         initialBallPosition = CGPoint(x: ball.size.width, y: floor1.size.height + ball.size.height / 2)
         initialBallSize = ball.size
         ball.position = initialBallPosition
@@ -55,16 +47,22 @@ class GameScene: SKScene {
         scrollLeftEndlessly(node1: floor1, node2: floor2, speed: 4)
     }
     
-    // MARK: - Floor Scrolling
+    // MARK: - Floor Setup
+    func setupFloor(_ floor: SKSpriteNode) {
+        let topLeft = CGPoint(x: 0, y: floor.size.height)
+        let topRight = CGPoint(x: floor.size.width, y: floor.size.height)
+        floor.physicsBody = SKPhysicsBody(edgeFrom: topLeft, to: topRight)
+        floor.physicsBody?.isDynamic = false
+        floor.zPosition = 1
+    }
+    
     func placeForEndLessScrolling(node1: SKSpriteNode, node2: SKSpriteNode) {
         node1.anchorPoint = .zero
         node1.position = .zero
-        node1.zPosition = 1
         node1.size.width = self.size.width
         
         node2.anchorPoint = .zero
         node2.position = CGPoint(x: node1.size.width, y: 0)
-        node2.zPosition = 1
         node2.size.width = self.size.width
     }
     
@@ -103,10 +101,13 @@ class GameScene: SKScene {
             // Move ball to top and change its color when released underground
             if ball.position.y < floor1.size.height {
                 ball.position.y = self.size.height
-                
-                ballIndex = (ballIndex < balls.count - 1) ? (ballIndex + 1) : 0
-                ball.texture = SKTexture(image: balls[ballIndex])
+                nextBall()
             }
         }
+    }
+    
+    func nextBall() {
+        ballIndex = (ballIndex < balls.count - 1) ? (ballIndex + 1) : 0
+        ball.texture = SKTexture(image: balls[ballIndex])
     }
 }
