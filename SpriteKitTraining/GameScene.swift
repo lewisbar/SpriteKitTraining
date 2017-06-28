@@ -10,7 +10,8 @@ import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    let balls = [#imageLiteral(resourceName: "RedStarBall"), #imageLiteral(resourceName: "BlueStarBall"), #imageLiteral(resourceName: "GreenStarBall"), #imageLiteral(resourceName: "ClearStarBall"), #imageLiteral(resourceName: "PurpleStarBall"), #imageLiteral(resourceName: "LightBlueStarBall"), #imageLiteral(resourceName: "BlackStarBall"), #imageLiteral(resourceName: "OrangeStarBall"), #imageLiteral(resourceName: "YellowStarBall"), #imageLiteral(resourceName: "PinkStarBall"), #imageLiteral(resourceName: "GrayStarBall")]
+    let balls = [#imageLiteral(resourceName: "RedStarBall"), #imageLiteral(resourceName: "GreenStarBall"), #imageLiteral(resourceName: "BlueStarBall"), #imageLiteral(resourceName: "LightBlueStarBall"), #imageLiteral(resourceName: "PurpleStarBall"), #imageLiteral(resourceName: "PinkStarBall"), #imageLiteral(resourceName: "YellowStarBall"), #imageLiteral(resourceName: "OrangeStarBall"), #imageLiteral(resourceName: "BlackStarBall"), #imageLiteral(resourceName: "GrayStarBall"), #imageLiteral(resourceName: "ClearStarBall")]
+    let ballColors: [SKColor] = [.ballRed, .ballGreen, .ballBlue, .ballLightBlue, .ballPurple, .ballPink, .ballYellow, .ballOrange, .ballBlack, .ballGray, .ballClear]
     var ballIndex = 0
     let ball = SKSpriteNode(imageNamed: "RedStarBall")
     let ground1 = SKSpriteNode(imageNamed: "Floor")
@@ -144,6 +145,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard ballCanFall else { return }
         dust.position = CGPoint(x: ball.position.x, y: ground1.size.height)
         dust.zPosition = 1
+        dust.particleColorSequence = SKKeyframeSequence(keyframeValues: [SKColor.groundBrown, ballColors[ballIndex]], times: [0, 3])
         dust.run(.fadeIn(withDuration: 0))
         dust.run(.fadeOut(withDuration: 0.5))
         ballCanFall = false

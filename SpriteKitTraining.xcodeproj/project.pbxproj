@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		300BDA8C1EFC4AE900C291A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30E3AF531EFBFB9F00B4F5BC /* Assets.xcassets */; };
+		305AA3F51F038D2E00F2828D /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305AA3F41F038D2E00F2828D /* Colors.swift */; };
 		30A0BFC31F035A17005005F6 /* Dust.sks in Resources */ = {isa = PBXBuildFile; fileRef = 30A0BFC21F035A17005005F6 /* Dust.sks */; };
 		30E3AF391EFAF27000B4F5BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E3AF381EFAF27000B4F5BC /* AppDelegate.swift */; };
 		30E3AF3B1EFAF27000B4F5BC /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 30E3AF3A1EFAF27000B4F5BC /* GameScene.sks */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		305AA3F41F038D2E00F2828D /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		30A0BFC21F035A17005005F6 /* Dust.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Dust.sks; sourceTree = "<group>"; };
 		30E3AF351EFAF27000B4F5BC /* SpriteKitTraining.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpriteKitTraining.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30E3AF381EFAF27000B4F5BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				30E3AF3A1EFAF27000B4F5BC /* GameScene.sks */,
 				30E3AF3C1EFAF27000B4F5BC /* Actions.sks */,
 				30A0BFC21F035A17005005F6 /* Dust.sks */,
+				305AA3F41F038D2E00F2828D /* Colors.swift */,
 				30E3AF3E1EFAF27000B4F5BC /* GameScene.swift */,
 				30E3AF401EFAF27000B4F5BC /* GameViewController.swift */,
 				30E3AF531EFBFB9F00B4F5BC /* Assets.xcassets */,
@@ -151,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				30E3AF3F1EFAF27000B4F5BC /* GameScene.swift in Sources */,
+				305AA3F51F038D2E00F2828D /* Colors.swift in Sources */,
 				30E3AF411EFAF27000B4F5BC /* GameViewController.swift in Sources */,
 				30E3AF391EFAF27000B4F5BC /* AppDelegate.swift in Sources */,
 			);
