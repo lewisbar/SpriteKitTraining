@@ -58,16 +58,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         ball.zRotation -= .pi * 5 / 180
         scrollLeftEndlessly(node1: ground1, node2: ground2, speed: 4)
-//        if ballCanFall, ballIsOnGround {
-//            dust?.position = ball.position
-//            dust?.zPosition = 1
-//            self.addChild(dust!)
-//            ballCanFall = false
-//        } else if ballIsOnGround {
-//            dust?.removeFromParent()
-//        } else {
-//            ballCanFall = true
-//        }
     }
     
     // MARK: - ground Setup
@@ -144,7 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         guard ballCanFall else { return }
         dust.position = CGPoint(x: ball.position.x, y: ground1.size.height)
-        dust.zPosition = 1
+        dust.zPosition = 3
         dust.particleColorSequence = SKKeyframeSequence(keyframeValues: [SKColor.groundBrown, ballColors[ballIndex]], times: [0, 3])
         dust.run(.fadeIn(withDuration: 0))
         dust.run(.fadeOut(withDuration: 0.5))
