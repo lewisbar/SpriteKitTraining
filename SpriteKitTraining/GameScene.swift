@@ -94,33 +94,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Ball Grabbing
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            ball.position = touch.location(in: self)
-            ball.size.width *= 2
-            ball.size.height *= 2
-            ball.physicsBody?.isDynamic = false
-        }
+        guard let touch = touches.first else { return }
+        
+        ball.position = touch.location(in: self)
+        ball.size.width = 2 * initialBallSize.width
+        ball.size.height = 2 * initialBallSize.height
+        ball.physicsBody?.isDynamic = false
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            ball.position = touch.location(in: self)
+            if atPoint(touch.location(in: self)) == ball {
+                ball.position = touch.location(in: self)
+            }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for _ in touches {
-            self.ball.size = self.initialBallSize
-            ball.physicsBody?.isDynamic = true
-            
-            // Move ball to top and change its color when released underground
-            if ball.position.y < ground1.size.height {
-                ball.position.y = self.size.height
-                nextBall()
-            }
-            
-            if !ballIsOnGround {
-                ballCanFall = true
+        for touch in touches {
+            if atPoint(touch.location(in: self)) == ball {
+                self.ball.size = initialBallSize
+                ball.physicsBody?.isDynamic = true
+                
+                // Move ball to top and change its color when released underground
+                if ball.position.y < ground1.size.height {
+                    ball.position.y = self.size.height
+                    nextBall()
+                }
+                
+                if !ballIsOnGround {
+                    ballCanFall = true
+                }
             }
         }
     }
