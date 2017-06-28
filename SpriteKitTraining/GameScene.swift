@@ -8,15 +8,20 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let balls = [#imageLiteral(resourceName: "RedStarBall"), #imageLiteral(resourceName: "BlueStarBall"), #imageLiteral(resourceName: "GreenStarBall"), #imageLiteral(resourceName: "ClearStarBall"), #imageLiteral(resourceName: "PurpleStarBall"), #imageLiteral(resourceName: "LightBlueStarBall"), #imageLiteral(resourceName: "BlackStarBall"), #imageLiteral(resourceName: "OrangeStarBall"), #imageLiteral(resourceName: "YellowStarBall"), #imageLiteral(resourceName: "PinkStarBall"), #imageLiteral(resourceName: "GrayStarBall")]
     var ballIndex = 0
     let ball = SKSpriteNode(imageNamed: "RedStarBall")
-    let floor1 = SKSpriteNode(imageNamed: "Floor")
-    let floor2 = SKSpriteNode(imageNamed: "Floor")
+    let ground1 = SKSpriteNode(imageNamed: "Floor")
+    let ground2 = SKSpriteNode(imageNamed: "Floor")
+    let dust = SKEmitterNode(fileNamed: "Dust.sks")!
     var initialBallPosition: CGPoint!
     var initialBallSize: CGSize!
+    var ballCanFall = false
+    var ballIsOnGround: Bool {
+        return ball.position.y == initialBallPosition.y && ball.size == initialBallSize
+    }
     
     override func didMove(to view: SKView) {
         
@@ -25,35 +30,54 @@ class GameScene: SKScene {
         
         // PhysicsWorld
         physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
+        physicsWorld.contactDelegate = self
         
-        // Floor
-        setupFloor(floor1)
-        setupFloor(floor2)
-        placeForEndLessScrolling(node1: floor1, node2: floor2)
-        self.addChild(floor1)
-        self.addChild(floor2)
+        // Ground
+        setupGround(ground1)
+        setupGround(ground2)
+        placeForEndLessScrolling(node1: ground1, node2: ground2)
+        self.addChild(ground1)
+        self.addChild(ground2)
         
         // Ball
-        initialBallPosition = CGPoint(x: ball.size.width, y: floor1.size.height + ball.size.height / 2)
+        initialBallPosition = CGPoint(x: ball.size.width, y: ground1.size.height + ball.size.height / 2)
         initialBallSize = ball.size
         ball.position = initialBallPosition
         ball.zPosition = 2
         ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2)
+        ball.physicsBody?.categoryBitMask = 0b1
+        ball.physicsBody?.contactTestBitMask = 0b10 // Ground
         self.addChild(ball)
+        
+        // Dust
+        dust.run(.fadeOut(withDuration: 0))
+        self.addChild(dust)
     }
     
     override func update(_ currentTime: TimeInterval) {
         ball.zRotation -= .pi * 5 / 180
-        scrollLeftEndlessly(node1: floor1, node2: floor2, speed: 4)
+        scrollLeftEndlessly(node1: ground1, node2: ground2, speed: 4)
+//        if ballCanFall, ballIsOnGround {
+//            dust?.position = ball.position
+//            dust?.zPosition = 1
+//            self.addChild(dust!)
+//            ballCanFall = false
+//        } else if ballIsOnGround {
+//            dust?.removeFromParent()
+//        } else {
+//            ballCanFall = true
+//        }
     }
     
-    // MARK: - Floor Setup
-    func setupFloor(_ floor: SKSpriteNode) {
-        let topLeft = CGPoint(x: 0, y: floor.size.height)
-        let topRight = CGPoint(x: floor.size.width, y: floor.size.height)
-        floor.physicsBody = SKPhysicsBody(edgeFrom: topLeft, to: topRight)
-        floor.physicsBody?.isDynamic = false
-        floor.zPosition = 1
+    // MARK: - ground Setup
+    func setupGround(_ ground: SKSpriteNode) {
+        let topLeft = CGPoint(x: 0, y: ground.size.height)
+        let topRight = CGPoint(x: ground.size.width, y: ground.size.height)
+        ground.physicsBody = SKPhysicsBody(edgeFrom: topLeft, to: topRight)
+        ground.physicsBody?.isDynamic = false
+        ground.physicsBody?.categoryBitMask = 0b10
+        ground.physicsBody?.contactTestBitMask = 0b1 // Ball
+        ground.zPosition = 1
     }
     
     func placeForEndLessScrolling(node1: SKSpriteNode, node2: SKSpriteNode) {
@@ -99,9 +123,13 @@ class GameScene: SKScene {
             ball.physicsBody?.isDynamic = true
             
             // Move ball to top and change its color when released underground
-            if ball.position.y < floor1.size.height {
+            if ball.position.y < ground1.size.height {
                 ball.position.y = self.size.height
                 nextBall()
+            }
+            
+            if !ballIsOnGround {
+                ballCanFall = true
             }
         }
     }
@@ -109,5 +137,15 @@ class GameScene: SKScene {
     func nextBall() {
         ballIndex = (ballIndex < balls.count - 1) ? (ballIndex + 1) : 0
         ball.texture = SKTexture(image: balls[ballIndex])
+    }
+    
+    // Contact
+    func didBegin(_ contact: SKPhysicsContact) {
+        guard ballCanFall else { return }
+        dust.position = CGPoint(x: ball.position.x, y: ground1.size.height)
+        dust.zPosition = 1
+        dust.run(.fadeIn(withDuration: 0))
+        dust.run(.fadeOut(withDuration: 0.5))
+        ballCanFall = false
     }
 }
