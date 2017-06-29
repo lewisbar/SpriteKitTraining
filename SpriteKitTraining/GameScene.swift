@@ -60,7 +60,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scrollLeftEndlessly(node1: ground1, node2: ground2, speed: 4)
     }
     
-    // MARK: - ground Setup
+    // MARK: - Ground Setup
     func setupGround(_ ground: SKSpriteNode) {
         let topLeft = CGPoint(x: 0, y: ground.size.height)
         let topRight = CGPoint(x: ground.size.width, y: ground.size.height)
